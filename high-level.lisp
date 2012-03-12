@@ -35,7 +35,7 @@
 
 (defmethod stream-read-char ((stream fcgi-input-stream))
   (let ((char (stream-read-byte stream)))
-    (when (eq char :eof)
+    (if (eq char :eof)
       :eof
       (code-char char))))
 
