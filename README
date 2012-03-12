@@ -1,0 +1,49 @@
+fastcgi
+=======
+
+Fastcgi is a [cffi](http://common-lisp.net/project/cffi/)-binding
+to [libfcgi](http://www.fastcgi.com).
+
+Alpha version, bound to change. Use at your own risk.
+
+Features
+--------
+
+ - Fast
+ - Based on a widely used library
+ - Lowlevel layer for speed
+ - Highlevel layer based on [gray-streams](www.lispworks.com/documentation/lw43/CLIM/html/climguide-336.htm]
+
+
+
+Installation
+------------
+
+Download the library from github, add its path to your
+`ql:*local-project-directories*`, enter
+`(ql:quickload "fastcgi")` and you are good to go.
+
+
+
+Architecture
+------------
+
+This library is split into two layers:
+
+1. A low-level binding
+   This binding is a very thing layer around the original
+   library. There is one-to-one mapping between its functions
+   and the functions of the `libfcgi`-library.
+   This means that you have to work with POSIX file-descriptors
+   directly, etc.
+2. A high-level binding
+   This binding provides some abstraction of the low-level
+   binding.
+   It provides access functions to environment-variables,
+   you don't have to work with c-structures directly,
+   and the file-descriptors are abstracted using
+   Gray-Streams. The latter means that you can use
+   standard Common Lisp functions like `format` to work
+   with the fastcgi streams, if `trivial-gray-streams`
+   supports your implementation.
+
