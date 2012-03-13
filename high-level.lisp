@@ -51,6 +51,21 @@
 (defmethod stream-write-char ((stream fcgi-output-stream) char)
   (stream-write-byte stream (char-code char)))
 
+(defmethod stream-write-sequence ((stream fcgi-output-stream) seq start end &rest rest)
+  (declare (ignore rest))
+  (put-str (make-array (- end start) :displaced-to seq
+                       :element-type (array-element-type seq))
+           (- end start)
+           (stream-of stream)))
+
+(defmethod stream-write-string ((stream fcgi-output-stream) string &optional start end)
+  (when (not end) (setf end (length string)))
+  (if start
+    (setf string (make-array (- end start) :displaced-to string
+                             :element-type (array-element-type string)))
+    (setf start 0))
+  (put-s string (stream-of stream)))
+
 (defmethod stream-terpri ((stream fcgi-output-stream))
   (stream-write-char stream #\Return)
   (stream-write-char stream #\Newline))
