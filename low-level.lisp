@@ -177,7 +177,7 @@ Side effects:
   (err fcgi-stream)
   (envp fcgi-stream))
 
-(cffi:defcfun "FCGX_Finish" :void
+(cffi:defcfun ("FCGX_Finish" finish) :void
   "Finish the current request (NOT multi-thread safe).
 
 Side effects:

@@ -3,6 +3,15 @@
 (defpackage #:fastcgi.low-level
   (:use #:cl)
   (:export
+   ;; CGI application functions
+   #:is-cgi 
+   #:init
+   #:finish 
+   #:accept
+   #:free
+   #:start-filter-data
+   ;; Working with requests
+   #:with-request
    #:request
    #:request-out
    #:request-in
@@ -10,28 +19,23 @@
    #:request-role
    #:request-id
    #:request-envp
-   #:with-request
-   #:get-error 
-   #:accept-r 
-   #:flush 
+   #:init-request 
+   #:finish-r 
+   #:accept-r
+   #:get-param
+   ;; Working with sockets
    #:open-socket 
+   #:close-socket 
+   ;; Working with streams
+   #:get-error 
+   #:flush 
    #:get-str 
    #:put-str 
    #:stream-close 
    #:get-line 
-   #:start-filter-data 
-   #:get-param 
-   #:close-socket 
-   #:is-cgi 
-   #:init 
    #:put-s 
-   #:free 
-   #:finish-r 
-   #:init-request 
    #:unget-char 
-   #:fcgx-finish 
    #:get-char 
-   #:accept 
    #:has-seen-eof 
    #:set-exit-status 
    #:put-char 
@@ -40,6 +44,15 @@
 (defpackage #:fastcgi.high-level
   (:use #:cl #:fastcgi.low-level #:trivial-gray-streams)
   (:export
+   ;; CGI application functions
+   #:is-cgi 
+   #:init 
+   #:free 
+   #:finish 
+   #:accept 
+   #:start-filter-data 
+   ;; Working with requests
+   #:with-request
    #:request
    #:request-get-out
    #:request-get-in
@@ -47,31 +60,25 @@
    #:request-role
    #:request-id
    #:request-envp
-   #:with-request
-   #:get-error 
-   #:accept-r 
-   #:flush 
-   #:open-socket 
-   #:start-filter-data 
-   #:get-param 
-   #:close-socket 
-   #:is-cgi 
-   #:init 
-   #:free 
-   #:finish-r 
    #:init-request 
-   #:unget-char 
-   #:fcgx-finish 
-   #:get-char 
-   #:accept 
-   #:has-seen-eof 
-   #:set-exit-status 
-   #:put-char 
-   #:clear-error
-
+   #:finish-r 
+   #:accept-r 
+   #:get-param
    #:map-environment
    #:map-environment-acons
    #:get-environment
-   #:environment-find)
+   #:environment-find
+   ;; Working with sockets
+   #:open-socket 
+   #:close-socket
+   ;; Working wit streams
+   #:get-error 
+   #:flush 
+   #:unget-char 
+   #:get-char 
+   #:has-seen-eof 
+   #:set-exit-status 
+   #:put-char 
+   #:clear-error)
   (:shadow #:set-exit-status))
 
