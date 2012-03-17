@@ -71,6 +71,10 @@
   (stream-write-char stream #\Newline))
 
 (defun map-environment (function request)
+  "Apply a function that takes one value to each key-value pair of the
+environment of REQUEST. A key-value pair is described as a string
+of the form \"<key>=<value>\".
+Returns nil."
   (loop :for i :from 0
         :with env = (request-envp request)
         :for ptr = (cffi:mem-aref env :pointer i)
@@ -79,17 +83,24 @@
   nil)
 
 (defun map-environment-acons (function request)
-  (map-environment
-   (lambda (string)
-     (let ((pos (position #\= string :test #'char=)))
-       (assert pos)
-       (funcall function
-                (intern (nsubstitute #\- #\_ (string-upcase (subseq string 0 pos))) :keyword)
-                (subseq string (+ pos 1)))))
-   request)
-  nil)
+  "Takes a function that takes two values and applies every key-value
+pair to that function. Returns nil. The function first converts the
+keys as described in GET-ENVIRONMENT. The values are left alone."
+  (flet ((string->keyword (str)
+           (intern (nsubstitute #\- #\_ (string-upcase str)) :keyword)))
+    (map-environment
+     (lambda (string)
+       (let ((pos (position #\= string :test #'char=)))
+         (assert pos)
+         (funcall function (string->keyword (subseq string 0 pos))
+                  (subseq string (+ pos 1)))))
+     request)))
 
 (defun get-environment (request)
+  "Returns the environment as an association list.
+
+The keys have been converted to keywords from strings by replacing =_=
+with =-= and capitalizing every character."
   (let ((result nil))
     (map-environment-acons
      (lambda (key value)
@@ -98,6 +109,9 @@
     result))
 
 (defun environment-find (key request)
+  "Return the value matching the KEY in the request, if any.
+KEY has to be a keyword."
+  (assert (typep key 'keyword) nil "KEY has to be a keyword.")
   (map-environment-acons
    (lambda (key2 value)
      (when (eq key key2)
