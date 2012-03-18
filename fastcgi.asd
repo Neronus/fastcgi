@@ -1,12 +1,11 @@
 ;;;; fastcgi.asd
 
 (asdf:defsystem #:fastcgi
-  :serial nil
   :depends-on (#:cffi
                #:trivial-gray-streams)
   :components ((:file "package")
                (:file "low-level" :depends-on ("package"))
-               (:file "high-level" :depends-on ("package" "low-level")))
+               (:file "fastcgi" :depends-on ("package" "low-level")))
 
   :author "Christian von Essen <christian@mvonessen.de>"
   :license "FreeBSD (see LICENSE)"

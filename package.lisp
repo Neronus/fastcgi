@@ -41,8 +41,9 @@
    #:put-char 
    #:clear-error))
 
-(defpackage #:fastcgi.high-level
+(defpackage #:fastcgi
   (:use #:cl #:fastcgi.low-level #:trivial-gray-streams)
+  (:nicknames #:fcgi)
   (:export
    ;; CGI application functions
    #:is-cgi 
